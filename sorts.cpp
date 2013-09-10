@@ -30,6 +30,9 @@ string vector2string(const vector<int>& v) {
   return sstream.str();
 }
 
+//functor to increment an integer by 2 
+int incrementBy2(int i) { return i + 2; }
+
 /*
   Insertion sort: start from the beginning and incrementally insert the 
   remaining elements to keep the array sorted
@@ -64,4 +67,8 @@ int main() {
 
   string s = vector2string(sortedItems);
   cout << s << "\n";
+
+  transform(sortedItems.begin(), sortedItems.end(), sortedItems.begin(), incrementBy2);
+  print(sortedItems);
+
 }
