@@ -8,6 +8,8 @@
 #include <iterator>
 #include <algorithm>
 #include <vector>
+#include <sstream> //stringstream
+#include <string>
 
 using namespace std;
 typedef std::vector<int>::iterator iterator;
@@ -17,6 +19,15 @@ typedef std::vector<int>::iterator iterator;
 void print(const vector<int>& v) {
   copy(v.begin(), v.end() - 1, ostream_iterator<int>(cout, ", "));
   cout << *(v.end() - 1) << endl;
+}
+
+//concatenate vector into a string
+string vector2string(const vector<int>& v) {
+  ostringstream sstream;
+  copy(v.begin(), v.end() - 1, ostream_iterator<int>(sstream, ", "));
+  sstream << *(v.end() - 1);
+  
+  return sstream.str();
 }
 
 /*
@@ -46,9 +57,11 @@ vector<int> insertionSort(const vector<int>& items) {
 
 int main() {
   int myints[] = {16,277,3,-2,24,-54,-1,0,56,87,7,-7};
-  std::vector<int> items (myints, myints + sizeof(myints) / sizeof(int));
+  vector<int> items (myints, myints + sizeof(myints) / sizeof(int));
   print(items);
-  std::vector<int> sortedItems = insertionSort(items);
+  vector<int> sortedItems = insertionSort(items);
   print(sortedItems);
 
+  string s = vector2string(sortedItems);
+  cout << s << "\n";
 }
