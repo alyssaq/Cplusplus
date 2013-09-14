@@ -13,9 +13,12 @@ void CRectangle::set_values (int a, int b) {
   y = b;
 }
 
+
+
 int main () {
   CRectangle rect;
   rect.set_values (3,4);
   cout << "area: " << rect.area() << "\n";
+
   return 0;
 }
