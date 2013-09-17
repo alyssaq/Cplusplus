@@ -10,6 +10,7 @@
 #include <vector>
 #include <sstream> //stringstream
 #include <string>
+#include <assert.h>
 
 using namespace std;
 typedef std::vector<int>::iterator iterator;
@@ -50,23 +51,64 @@ vector<int> insertionSort(const vector<int>& items) {
         sortedItems[j] = temp;
       }
     }
-    print(sortedItems);
+    //print(sortedItems);
   }
 
   return sortedItems;
-
 }
 
+/*
+  Merge sort: O(n log n)
+  Using a temp vector to avoid recreating temp arrays during the split
+ */
+void merge_helper(vector<int> &items, int start, int end, vector<int> &temp) {
+  if (start + 1 == end) return; //base case: one item
+
+  int i = 0;
+  int len = (end - start);
+  int mid = start + len / 2;
+  //pointer index to the start of the left and right subarrays
+  int l = start, r = mid;
+
+  merge_helper(items, start, mid, temp); //mergeSort first half
+  merge_helper(items, mid, end, temp);  //mergeSort second half
+
+  for (i = 0; i < len; i++) {
+    /* Check if there are items in the left to compare.
+    If there are, compare the left with right.
+    If there is nothing to compare in the right, just add the left
+    */
+    if (l < mid && (r == end || items[l] < items[r])) {
+      temp[i] = items[l++];
+    } else {
+      temp[i] = items[r++];
+    }
+  }
+
+  //Copy the temp sorted array back to the original items
+  copy(temp.begin(), temp.begin() + len, items.begin() + start);
+}
+
+vector<int> mergeSort(const vector<int> &v) {
+  vector<int> temp;
+  vector<int> items(v);
+  temp.resize(items.size());
+  merge_helper(items, 0, items.size(), temp);
+  return items;
+}
 
 int main() {
   int myints[] = {16,277,3,-2,24,-54,-1,0,56,87,7,-7};
   vector<int> items (myints, myints + sizeof(myints) / sizeof(int));
   print(items);
-  vector<int> sortedItems = insertionSort(items);
-  print(sortedItems);
 
+  vector<int> sortedItems = insertionSort(items);
   string s = vector2string(sortedItems);
-  cout << s << "\n";
+  assert(s == "-54, -7, -2, -1, 0, 3, 7, 16, 24, 56, 87, 277");
+
+  sortedItems = mergeSort(items);
+  s = vector2string(sortedItems);
+  assert(s == "-54, -7, -2, -1, 0, 3, 7, 16, 24, 56, 87, 277");
 
   transform(sortedItems.begin(), sortedItems.end(), sortedItems.begin(), incrementBy2);
   print(sortedItems);
