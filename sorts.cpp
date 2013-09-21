@@ -13,7 +13,7 @@
 #include <assert.h>
 
 using namespace std;
-typedef std::vector<int>::iterator iterator;
+typedef std::vector<int>::iterator vecIter;
 typedef std::vector<int>::const_iterator citerator;
 
 // print a vector
@@ -59,8 +59,8 @@ vector<int> insertionSort(const vector<int>& items) {
 
 int findAndDeleteMinItem(std::vector<int> &items) {
   int min = numeric_limits<int>::max();
-  vector<int>::iterator min_iter = items.begin();
-  for (vector<int>::iterator iter = items.begin(); iter != items.end(); iter++) {
+  vecIter min_iter = items.begin();
+  for (vecIter iter = items.begin(); iter != items.end(); iter++) {
     if (*iter < min) {
       min = *iter;
       min_iter = iter;
@@ -93,27 +93,27 @@ vector<int> selectionSort(const vector<int>& items) {
   Merge sort: O(n log n)
   Using a temp vector to avoid recreating temp arrays during the split
  */
-void merge_helper(vector<int> &items, int start, int end, vector<int> &temp) {
+void mergeHelper(vector<int> &items, int start, int end, vector<int> &temp) {
   if (start + 1 == end) return; //base case: one item
 
   int i = 0;
   int len = (end - start);
   int mid = start + len / 2;
   //pointer index to the start of the left and right subarrays
-  int l = start, r = mid;
+  int lidx = start, ridx = mid;
 
-  merge_helper(items, start, mid, temp); //mergeSort first half
-  merge_helper(items, mid, end, temp);  //mergeSort second half
+  mergeHelper(items, start, mid, temp); //mergeSort first half
+  mergeHelper(items, mid, end, temp);  //mergeSort second half
 
   for (i = 0; i < len; i++) {
     /* Check if there are items in the left to compare.
     If there are, compare the left with right.
     If there is nothing to compare in the right, just add the left
     */
-    if (l < mid && (r == end || items[l] < items[r])) {
-      temp[i] = items[l++];
+    if (lidx < mid && (ridx == end || items[lidx] < items[ridx])) {
+      temp[i] = items[lidx++];
     } else {
-      temp[i] = items[r++];
+      temp[i] = items[ridx++];
     }
   }
 
@@ -121,11 +121,41 @@ void merge_helper(vector<int> &items, int start, int end, vector<int> &temp) {
   copy(temp.begin(), temp.begin() + len, items.begin() + start);
 }
 
+/*
+  As per mergeHelper above but using pointers
+ */
+void mergeHelperPointers(vector<int> &items, vecIter start, vecIter end, vector<int> &temp) {
+  if (start + 1 == end) return; //base case: one item
+
+  vecIter mid = start + (end - start) / 2;
+  //pointer index to the start of the left and right subarrays
+  vecIter liter = start, riter = mid;
+
+  mergeHelperPointers(items, start, mid, temp); //mergeSort first half
+  mergeHelperPointers(items, mid, end, temp);  //mergeSort second half
+
+  temp.clear();
+  for (vecIter iter = start; iter != end; iter++) {
+    /* Check if there are items in the left to compare.
+    If there are, compare the left with right.
+    If there is nothing to compare in the right, just add the left */
+    if (liter < mid && (riter == end || *(liter) < *(riter) )) {
+      temp.push_back(*(liter++));
+    } else {
+      temp.push_back(*(riter++));
+    }
+  }
+
+  //Copy the temp sorted array back to the original items
+  copy(temp.begin(), temp.end(), start);
+}
+
 vector<int> mergeSort(const vector<int> &v) {
   vector<int> temp;
   vector<int> items(v);
   temp.resize(items.size());
-  merge_helper(items, 0, items.size(), temp);
+  //mergeHelper(items, 0, items.size(), temp);
+  mergeHelperPointers(items, items.begin(), items.end(), temp);
   return items;
 }
 
@@ -139,6 +169,7 @@ int main() {
   assert(s == "-54, -7, -2, -1, 0, 3, 7, 16, 24, 56, 87, 277");
 
   sortedItems = mergeSort(items);
+  print(sortedItems);
   s = vector2string(sortedItems);
   assert(s == "-54, -7, -2, -1, 0, 3, 7, 16, 24, 56, 87, 277");
 
