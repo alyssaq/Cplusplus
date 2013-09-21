@@ -14,7 +14,7 @@
 
 using namespace std;
 typedef std::vector<int>::iterator iterator;
-
+typedef std::vector<int>::const_iterator citerator;
 
 // print a vector
 void print(const vector<int>& v) {
@@ -54,6 +54,37 @@ vector<int> insertionSort(const vector<int>& items) {
     //print(sortedItems);
   }
 
+  return sortedItems;
+}
+
+int findAndDeleteMinItem(std::vector<int> &items) {
+  int min = 100000;
+  vector<int>::iterator min_iter = items.begin();
+  for (vector<int>::iterator iter = items.begin(); iter != items.end(); iter++) {
+    if (*iter < min) {
+      min = *iter;
+      min_iter = iter;
+    }
+  }
+  items.erase(min_iter);
+  return min;
+}
+
+/*
+  Selection sort: Keep finding the min item O(n)
+  push it into a sorted array and delete.
+  O(n^2). 
+  Heapsort: Use a prioirity queue and speed it to O(n log n)
+  Find and delete takes O(log n) instead of O(n)
+
+*/
+vector<int> selectionSort(const vector<int>& items) {
+  vector<int> tempItems = items;
+  vector<int> sortedItems;
+
+  for(citerator iter = items.begin(); iter != items.end(); iter++) {
+    sortedItems.push_back(findAndDeleteMinItem(tempItems));
+  }
   return sortedItems;
 }
 
@@ -107,6 +138,10 @@ int main() {
   assert(s == "-54, -7, -2, -1, 0, 3, 7, 16, 24, 56, 87, 277");
 
   sortedItems = mergeSort(items);
+  s = vector2string(sortedItems);
+  assert(s == "-54, -7, -2, -1, 0, 3, 7, 16, 24, 56, 87, 277");
+
+  sortedItems = selectionSort(items);
   s = vector2string(sortedItems);
   assert(s == "-54, -7, -2, -1, 0, 3, 7, 16, 24, 56, 87, 277");
 
