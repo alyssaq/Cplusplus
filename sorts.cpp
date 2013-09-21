@@ -160,6 +160,43 @@ vector<int> mergeSort(const vector<int> &v) {
   return items;
 }
 
+vecIter partition(vector<int> &items, vecIter start, vecIter rand) {
+  vecIter divider = start; // divider iterator for the rand pivot element
+
+  for (vecIter iter = start; iter < rand; iter++) {
+    if (*iter < *rand) {
+      swap(*iter, *divider);
+      divider++;
+    }
+  }
+  swap(*rand, *divider);
+
+  return divider;
+}
+/*
+ Select a random item from n items to sort.
+ Separate n-1 other items into two piles: 
+ A left pile before rand in sorted order
+ A right pile after rand in sorted order.
+*/
+void quickSortHelper(vector<int> &items, vecIter start, vecIter rand) {
+  if (start > rand) return; //base case: nothing to partition
+
+  vecIter pivot = partition(items, start, rand);
+  quickSortHelper(items, start,     pivot - 1);
+  quickSortHelper(items, pivot + 1, rand     );
+}
+
+/*
+Quick Sort: O(n log n)
+*/
+vector<int> quickSort(const vector<int> &v) {
+  vector<int> items(v);
+  quickSortHelper(items, items.begin(), items.end() - 1);
+
+  return items;
+}
+
 int main() {
   int myints[] = {16,277,3,-2,24,-54,-1,0,56,87,7,-7};
   vector<int> items (myints, myints + sizeof(myints) / sizeof(int));
@@ -175,6 +212,10 @@ int main() {
   assert(s == "-54, -7, -2, -1, 0, 3, 7, 16, 24, 56, 87, 277");
 
   sortedItems = selectionSort(items);
+  s = vector2string(sortedItems);
+  assert(s == "-54, -7, -2, -1, 0, 3, 7, 16, 24, 56, 87, 277");
+
+  sortedItems = quickSort(items);
   s = vector2string(sortedItems);
   assert(s == "-54, -7, -2, -1, 0, 3, 7, 16, 24, 56, 87, 277");
 
