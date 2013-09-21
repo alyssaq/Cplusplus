@@ -14,7 +14,7 @@
 
 using namespace std;
 typedef std::vector<int>::iterator vecIter;
-typedef std::vector<int>::const_iterator citerator;
+typedef std::vector<int>::const_iterator vecCiter;
 
 // print a vector
 void print(const vector<int>& v) {
@@ -83,7 +83,7 @@ vector<int> selectionSort(const vector<int>& items) {
   vector<int> tempItems = items;
   vector<int> sortedItems;
 
-  for(citerator iter = items.begin(); iter != items.end(); iter++) {
+  for(vecCiter iter = items.begin(); iter != items.end(); iter++) {
     sortedItems.push_back(findAndDeleteMinItem(tempItems));
   }
   return sortedItems;
@@ -153,8 +153,9 @@ void mergeHelperPointers(vector<int> &items, vecIter start, vecIter end, vector<
 vector<int> mergeSort(const vector<int> &v) {
   vector<int> temp;
   vector<int> items(v);
-  temp.resize(items.size());
+  //temp.resize(items.size());
   //mergeHelper(items, 0, items.size(), temp);
+  temp.reserve(items.size());
   mergeHelperPointers(items, items.begin(), items.end(), temp);
   return items;
 }
