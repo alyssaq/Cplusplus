@@ -58,7 +58,7 @@ vector<int> insertionSort(const vector<int>& items) {
 }
 
 int findAndDeleteMinItem(std::vector<int> &items) {
-  int min = 100000;
+  int min = numeric_limits<int>::max();
   vector<int>::iterator min_iter = items.begin();
   for (vector<int>::iterator iter = items.begin(); iter != items.end(); iter++) {
     if (*iter < min) {
@@ -67,6 +67,7 @@ int findAndDeleteMinItem(std::vector<int> &items) {
     }
   }
   items.erase(min_iter);
+
   return min;
 }
 
