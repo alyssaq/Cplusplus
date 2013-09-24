@@ -35,9 +35,9 @@ string vector2string(const vector<int>& v) {
 int incrementBy2(int i) { return i + 2; }
 
 /*
-  Insertion sort: start from the beginning and incrementally insert the 
+  Insertion sort: O(n^2)
+  Start from the beginning and incrementally insert the 
   remaining elements to keep the array sorted
-  O(n^2)
 */
 vector<int> insertionSort(const vector<int>& items) {
   vector<int> sortedItems = items;
@@ -72,19 +72,41 @@ int findAndDeleteMinItem(std::vector<int> &items) {
 }
 
 /*
-  Selection sort: Keep finding the min item O(n)
+  Selection sort: O(n^2)
+  Keep finding the min item O(n)
   push it into a sorted array and delete.
-  O(n^2). 
   Heapsort: Use a prioirity queue and speed it to O(n log n)
   Find and delete takes O(log n) instead of O(n)
-
 */
-vector<int> selectionSort(const vector<int>& items) {
+vector<int> selectionSort(const vector<int> &items) {
   vector<int> tempItems = items;
   vector<int> sortedItems;
 
   for(vecCiter iter = items.begin(); iter != items.end(); iter++) {
     sortedItems.push_back(findAndDeleteMinItem(tempItems));
+  }
+  return sortedItems;
+}
+
+/*
+  Bubble sort: O(n^2)
+  Repeatedly traverse through the list, comparing each pair of 
+  adjacent items and swapping them if they are in the wrong order.
+*/
+vector<int> bubbleSort(const vector<int> &items) {
+  vector<int> sortedItems(items);
+  vecIter iterA, iterB;
+  bool hasSwapped = true;
+
+  while (hasSwapped) {
+    hasSwapped = false;
+    iterA = sortedItems.begin(), iterB = iterA + 1;
+    for(; iterB != sortedItems.end(); iterA++, iterB++) {
+      if (*iterA > *iterB) {
+        swap(*iterA, *iterB);
+        hasSwapped = true;
+      }
+    }
   }
   return sortedItems;
 }
@@ -150,6 +172,13 @@ void mergeHelperPointers(vector<int> &items, vecIter start, vecIter end, vector<
   copy(temp.begin(), temp.end(), start);
 }
 
+/*
+  Merge sort: O(n log n)
+  1) Divide the unsorted list into n sublists, 
+   each containing 1 element (a list of 1 element is considered sorted).
+  2) Repeatedly merge sublists to produce new sublists until 
+   there is only 1 sublist remaining. This will be the sorted list.
+*/
 vector<int> mergeSort(const vector<int> &v) {
   vector<int> temp;
   vector<int> items(v);
@@ -200,24 +229,29 @@ vector<int> quickSort(const vector<int> &v) {
 int main() {
   int myints[] = {16,277,3,-2,24,-54,-1,0,56,87,7,-7};
   vector<int> items (myints, myints + sizeof(myints) / sizeof(int));
+  const string sortedStr = "-54, -7, -2, -1, 0, 3, 7, 16, 24, 56, 87, 277";
   print(items);
 
   vector<int> sortedItems = insertionSort(items);
   string s = vector2string(sortedItems);
-  assert(s == "-54, -7, -2, -1, 0, 3, 7, 16, 24, 56, 87, 277");
+  assert(s == sortedStr);
+
+  sortedItems = selectionSort(items);
+  s = vector2string(sortedItems);
+  assert(s == sortedStr);
+
+  sortedItems = bubbleSort(items);
+  s = vector2string(sortedItems);
+  assert(s == sortedStr);
 
   sortedItems = mergeSort(items);
   print(sortedItems);
   s = vector2string(sortedItems);
-  assert(s == "-54, -7, -2, -1, 0, 3, 7, 16, 24, 56, 87, 277");
-
-  sortedItems = selectionSort(items);
-  s = vector2string(sortedItems);
-  assert(s == "-54, -7, -2, -1, 0, 3, 7, 16, 24, 56, 87, 277");
+  assert(s == sortedStr);
 
   sortedItems = quickSort(items);
   s = vector2string(sortedItems);
-  assert(s == "-54, -7, -2, -1, 0, 3, 7, 16, 24, 56, 87, 277");
+  assert(s == sortedStr);
 
   transform(sortedItems.begin(), sortedItems.end(), sortedItems.begin(), incrementBy2);
   print(sortedItems);
