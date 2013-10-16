@@ -7,6 +7,8 @@
 
 using namespace std;
 
+//another hash function:
+//object -> int hash code % table size to get table index
 int hash(string &str, int tableLen) {
   //return hash function of sum of strings mod table size
   int sum;
@@ -28,7 +30,6 @@ int horner_hash(string &str) {
 }
 
 int main() {
-
   // constructors used in the same order as described above:
   std::vector<int> first;                                // empty vector of ints
   std::vector<int> second (4,100);                       // four ints with value 100
