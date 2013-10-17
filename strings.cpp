@@ -4,6 +4,7 @@
 #include <vector>
 #include <algorithm> 
 #include <sstream> //stringstream
+#include <stack>
 
 using namespace std;
 
@@ -29,7 +30,38 @@ int horner_hash(string &str) {
   return h;
 }
 
+string stringReverse(string &input) {
+  stack<char> s;
+  string::const_iterator citer = input.begin();
+  for (; citer != input.end(); citer++) {
+    s.push(*citer);
+  }
+  string output;
+  while(!s.empty()) {
+    output.push_back(s.top());
+    s.pop();
+  }
+  return output;
+}
+
+string stringReverseArr(string &input) {
+  string output(input);
+  string::iterator left = output.begin(), right = output.end()-1;
+
+  while (left != right) {
+    char temp = *left;
+    *left++ = *right;
+    *right-- = temp;
+  }
+
+  return output;
+}
+
 int main() {
+
+  string inputStr = "hello world";
+  cout << stringReverseArr(inputStr) << endl;
+
   // constructors used in the same order as described above:
   std::vector<int> first;                                // empty vector of ints
   std::vector<int> second (4,100);                       // four ints with value 100
@@ -56,4 +88,6 @@ int main() {
   //copy(strs.begin(), strs.end(), ostream_iterator<string>(cout, " "));
   //transform(strs.begin(), strs.end(), hashNums.begin(), horner_hash);
   copy(hashNums.begin(), hashNums.end(), ostream_iterator<int>(cout, " "));
+
+
 }
