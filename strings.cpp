@@ -56,6 +56,30 @@ string stringReverseArr(string &input) {
 
   return output;
 }
+typedef vector<int>::const_iterator citer;
+
+int puddleCalculator(citer start, citer end, int sum) {
+  if (start == end) return sum; //base case. All puddles checked
+
+  if (*start <= *end) { //If start level is less or equal to end level
+    citer curIter = start;
+    curIter++;
+    while (*curIter < *start) {
+      sum += *start - *curIter;
+      curIter++;
+    }
+    sum += puddleCalculator(curIter, end, sum);
+  } else { //*end > *start
+    citer curIter = end;
+    curIter--;
+    while(*curIter < *end) {
+      sum += *end - *curIter;
+      curIter--;
+    }
+    sum += puddleCalculator(start, curIter, sum);
+  }
+  return sum;
+}
 
 int main() {
 
