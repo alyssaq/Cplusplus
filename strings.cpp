@@ -62,23 +62,18 @@ int puddleCalculator(citer start, citer end, int sum) {
   if (start == end) return sum; //base case. All puddles checked
 
   if (*start <= *end) { //If start level is less or equal to end level
-    citer curIter = start;
-    curIter++;
+    citer curIter = start + 1;
     while (*curIter < *start) {
-      sum += *start - *curIter;
-      curIter++;
+      sum += *start - *(curIter++);
     }
     return puddleCalculator(curIter, end, sum);
   } else { //*end > *start
-    citer curIter = end;
-    curIter--;
+    citer curIter = end - 1;
     while(*curIter < *end) {
-      sum += *end - *curIter;
-      curIter--;
+      sum += *end - *(curIter--);
     }
     return puddleCalculator(start, curIter, sum);
   }
-
 }
 
 int main() {
