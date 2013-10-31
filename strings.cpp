@@ -68,7 +68,7 @@ int puddleCalculator(citer start, citer end, int sum) {
       sum += *start - *curIter;
       curIter++;
     }
-    sum += puddleCalculator(curIter, end, sum);
+    return puddleCalculator(curIter, end, sum);
   } else { //*end > *start
     citer curIter = end;
     curIter--;
@@ -76,12 +76,17 @@ int puddleCalculator(citer start, citer end, int sum) {
       sum += *end - *curIter;
       curIter--;
     }
-    sum += puddleCalculator(start, curIter, sum);
+    return puddleCalculator(start, curIter, sum);
   }
-  return sum;
+
 }
 
 int main() {
+  //int myints[] = {5, 1, 2, 3, 4, 7};
+  int myints[] = {5, 1, 3, 1, 2, 1, 7};
+  vector<int> points (myints, myints + sizeof(myints) / sizeof(int));
+  int sum = puddleCalculator(points.begin(), points.end(), 0);
+  cout << "puddle: " << sum << endl;
 
   string inputStr = "hello world";
   cout << stringReverseArr(inputStr) << endl;
