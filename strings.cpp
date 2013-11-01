@@ -58,6 +58,8 @@ string stringReverseArr(string &input) {
 }
 typedef vector<int>::const_iterator citer;
 
+//Given the heights of the hill at x coordinates, 
+// calculate the volume of collected rain 
 int puddleCalculator(citer start, citer end, int sum) {
   if (start == end) return sum; //base case. All puddles checked
 
